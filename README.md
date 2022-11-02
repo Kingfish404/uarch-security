@@ -2,13 +2,17 @@
 
 MDS means Microarchitectural Data Sampling.
 
-## Attack List
+## MDS Attack List
 
 - [x] RIDL
 - [ ] Fallout
 - [x] Zombieload
 - [ ] CacheOut
 - [x] Medusa
+
+## Else Attack List
+
+- [x] Spectre
 
 ## Platform
 
@@ -53,3 +57,12 @@ CPU NODE SOCKET CORE L1d:L1i:L2:L3 ONLINE MAXMHZ    MINMHZ
 6   0    0      2    2:2:2:0       yes    4000.0000 800.0000
 7   0    0      3    3:3:3:0       yes    4000.0000 800.0000
 ```
+
+## Reference
+
+- https://meltdownattack.com/
+- https://zombieloadattack.com/
+- https://github.com/vusec/ridl
+- https://github.com/medusajs/medusa
+- https://github.com/IAIK/ZombieLoad
+- https://github.com/yadav-sachin/spectre-attack-image

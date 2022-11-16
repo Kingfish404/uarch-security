@@ -10,8 +10,9 @@ MDS means Microarchitectural Data Sampling.
 - [ ] CacheOut
 - [x] Medusa
 
-## Else Attack List
+## Other Attack List
 
+- [ ] Meltdown
 - [x] Spectre
 
 ## Platform

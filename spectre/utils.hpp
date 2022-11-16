@@ -1,19 +1,33 @@
+#ifndef UTILS_HPP
+#define UTILS_HPP
 #include <stdint.h>
 #include <memory.h>
 
 const size_t CACHE_MISS = 150;
 
+namespace math
+{
+    bool is_prime(int a)
+    {
+        if (a < 2)
+            return 0;
+        for (int i = 2; i * i <= a; ++i)
+            if (a % i == 0)
+                return false;
+        return true;
+    }
+}
+
 namespace x86_64
 {
-    class ASMUtils
+    namespace asm_utils
     {
-    public:
-        static void nop()
+        void nop()
         {
             __asm__ volatile("nop");
         }
 
-        static uint64_t rdtsc()
+        uint64_t rdtsc()
         {
             uint64_t a, d;
             __asm__ volatile("mfence");
@@ -24,19 +38,19 @@ namespace x86_64
             return a;
         }
 
-        static void flush(void *p) { __asm__ volatile("clflush 0(%0)\n"
-                                                      :
-                                                      : "c"(p)
-                                                      : "rax"); }
+        void flush(void *p) { __asm__ volatile("clflush 0(%0)\n"
+                                               :
+                                               : "c"(p)
+                                               : "rax"); }
 
-        static void maccess(void *p) { __asm__ volatile("movq (%0), %%rax\n"
-                                                        :
-                                                        : "c"(p)
-                                                        : "rax"); }
+        void maccess(void *p) { __asm__ volatile("movq (%0), %%rax\n"
+                                                 :
+                                                 : "c"(p)
+                                                 : "rax"); }
 
-        static void mfence() { __asm__ volatile("mfence"); }
+        void mfence() { __asm__ volatile("mfence"); }
 
-        static int flush_reload(void *ptr)
+        int flush_reload(void *ptr)
         {
             uint64_t start = 0, end = 0;
 
@@ -57,3 +71,4 @@ namespace x86_64
     };
 
 }
+#endif

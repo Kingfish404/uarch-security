@@ -1,10 +1,16 @@
 CFLAGS = -std=c++11 -Wall -O0
+SOURCE-GENERAL = utils.hpp
 
-PROGRAM = spectre.out
-SOURCE  = main.cpp utils.hpp
-     
-all: $(PROGRAM)
-     
-$(PROGRAM): $(SOURCE) ; $(CC) $(CFLAGS) -o $(PROGRAM) $(SOURCE)
-     
-clean: ; rm -f $(PROGRAM)
+MAIN = spectre
+SOURCE  = main.cpp $(SOURCE-GENERAL)
+
+MAIN-SIMPLE = spectre-simple
+SOURCE-SIMPLE  = main-simple.cpp $(SOURCE-GENERAL)
+
+all: $(MAIN) $(MAIN-SIMPLE)
+
+$(MAIN): $(SOURCE) ; $(CC) $(CFLAGS) -o $(MAIN) $(SOURCE)
+
+$(MAIN-SIMPLE): $(SOURCE-SIMPLE) ; $(CC) $(CFLAGS) -o $(MAIN-SIMPLE) $(SOURCE-SIMPLE)
+
+clean: ; rm -f $(MAIN) $(MAIN-SIMPLE)

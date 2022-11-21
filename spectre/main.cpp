@@ -8,7 +8,7 @@
 #define FROM ' '
 #define TO 'Z'
 
-const int TRAINING_LOOPS = 100;
+const int TRAINING_LOOPS = 500;
 const int INBETWEEN_DELAY = 10;
 bool IS_ATTACK[TRAINING_LOOPS];
 
@@ -43,7 +43,7 @@ bool is_prime(int a)
 }
 
 // #define LOOP
-// #define PRIME
+#define PRIME
 void init()
 {
 #ifdef LOOP

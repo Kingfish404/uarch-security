@@ -3,8 +3,6 @@
 #include <stdint.h>
 #include <memory.h>
 
-const size_t CACHE_MISS = 150;
-
 namespace math
 {
     bool is_prime(int a)
@@ -22,19 +20,38 @@ namespace x86_64
 {
     namespace asm_utils
     {
+        const size_t CACHE_MISS = 150;
+        uint64_t a, d;
         void nop()
         {
             __asm__ volatile("nop");
         }
 
+        void mfence() { __asm__ volatile("mfence"); }
+
+        uint64_t rdtscp()
+        {
+            __asm__ volatile("rdtscp"
+                             : "=a"(a), "=d"(d)::"rcx");
+            a = (d << 32) | a;
+            return a;
+        }
+
         uint64_t rdtsc()
         {
-            uint64_t a, d;
-            __asm__ volatile("mfence");
             __asm__ volatile("rdtsc"
                              : "=a"(a), "=d"(d));
             a = (d << 32) | a;
-            __asm__ volatile("mfence");
+            return a;
+        }
+
+        uint64_t rdtsc_mfence()
+        {
+            mfence();
+            __asm__ volatile("rdtsc"
+                             : "=a"(a), "=d"(d));
+            a = (d << 32) | a;
+            mfence();
             return a;
         }
 
@@ -48,17 +65,12 @@ namespace x86_64
                                                  : "c"(p)
                                                  : "rax"); }
 
-        void mfence() { __asm__ volatile("mfence"); }
-
         int flush_reload(void *ptr)
         {
             uint64_t start = 0, end = 0;
-
-            start = rdtsc();
+            start = rdtsc_mfence();
             maccess(ptr);
-            end = rdtsc();
-
-            mfence();
+            end = rdtsc_mfence();
 
             flush(ptr);
 

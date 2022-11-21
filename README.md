@@ -12,7 +12,7 @@ MDS means Microarchitectural Data Sampling.
 
 ## Other Attack List
 
-- [ ] Meltdown
+- [x] Meltdown
 - [x] Spectre
 
 ## Platform
@@ -67,3 +67,4 @@ CPU NODE SOCKET CORE L1d:L1i:L2:L3 ONLINE MAXMHZ    MINMHZ
 - https://github.com/medusajs/medusa
 - https://github.com/IAIK/ZombieLoad
 - https://github.com/yadav-sachin/spectre-attack-image
+- https://seedsecuritylabs.org/Labs_16.04/System/Meltdown_Attack/

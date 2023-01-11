@@ -8,6 +8,13 @@ build: kernel_modules
 kernel_modules:
 	make -C /lib/modules/$(KVERS)/build M=$(CURDIR) modules
 
+prepare:
+	sudo insmod kernel_write.ko
+	dmesg | grep 'secret data address'
+
+cancel_prepare:
+	sudo rmmod kernel_write.ko
+
 clean:
 	make -C /lib/modules/$(KVERS)/build M=$(CURDIR) clean
 

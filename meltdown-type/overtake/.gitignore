@@ -1,0 +1,7 @@
+__pycache__
+*.out
+
+.vscode
+.idea
+
+PHYSICAL_ADDRESS_OF_SECRET

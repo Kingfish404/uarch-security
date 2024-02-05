@@ -60,7 +60,7 @@ unsigned int xbegin()
 
 void xend()
 {
-    asm volatile(".byte 0x0f; .byte 0x01; .byte 0xd5" ::
+    asm volatile(".byte 0x0f\n\t .byte 0x01\n\t .byte 0xd5" ::
                      : "memory");
 }
 
@@ -154,7 +154,6 @@ size_t detect_flush_reload_threshold()
     size_t reload_time = 0, flush_reload_time = 0, i, count = 1000000;
     size_t dummy[16];
     size_t *ptr = dummy + 8;
-    uint64_t start = 0, end = 0;
 
     maccess(ptr);
     for (i = 0; i < count; i++)
